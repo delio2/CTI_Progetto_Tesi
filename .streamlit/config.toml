@@ -1,0 +1,7 @@
+# La demo non richiede il ricaricamento automatico dei file.
+[server]
+fileWatcherType = "none"
+address = "127.0.0.1"
+
+[browser]
+gatherUsageStats = false

@@ -1,0 +1,67 @@
+{
+  "calcolato_il": "2026-09-01T17:27:57.472267+00:00",
+  "numero_casi": 70,
+  "ripartizione": {
+    "ioc": 20,
+    "malware": 20,
+    "attori": 20,
+    "trasversale": 10
+  },
+  "instradamento": {
+    "accuratezza_esatta": 0.7714285714285715,
+    "macro_f1": 0.8859910581222056,
+    "per_dominio": {
+      "ioc": {
+        "precisione": 0.7941176470588235,
+        "richiamo": 1.0,
+        "f1": 0.8852459016393442,
+        "veri_positivi": 27,
+        "falsi_positivi": 7,
+        "falsi_negativi": 0
+      },
+      "malware": {
+        "precisione": 1.0,
+        "richiamo": 0.8857142857142857,
+        "f1": 0.9393939393939393,
+        "veri_positivi": 31,
+        "falsi_positivi": 0,
+        "falsi_negativi": 4
+      },
+      "attori": {
+        "precisione": 0.7142857142857143,
+        "richiamo": 1.0,
+        "f1": 0.8333333333333333,
+        "veri_positivi": 25,
+        "falsi_positivi": 10,
+        "falsi_negativi": 0
+      }
+    }
+  },
+  "configurazioni": {
+    "router": {
+      "f1_medio_riferimenti_attesi": 0.29803485523946704,
+      "evidenze_medie": 17.12857142857143,
+      "copertura_riferimenti_attesi_nelle_citazioni": 0.7931034482758621,
+      "quota_risposte_con_citazione_valida": 0.8857142857142857,
+      "latenza_mediana_ms": 16713.0
+    },
+    "generale": {
+      "f1_medio_riferimenti_attesi": 0.07949347374144768,
+      "evidenze_medie": 29.82857142857143,
+      "copertura_riferimenti_attesi_nelle_citazioni": 0.7931034482758621,
+      "quota_risposte_con_citazione_valida": 0.9,
+      "latenza_mediana_ms": 24933.5
+    }
+  },
+  "ambiente": {
+    "python": "3.13.0",
+    "llm": "qwen3:8b",
+    "temperatura": 0,
+    "seme": 20260819,
+    "ragionamento": false,
+    "finestra_contesto": 24576,
+    "token_massimi_risposta": 1500,
+    "modello_embedding": "Qwen/Qwen3-Embedding-0.6B",
+    "dimensioni_embedding": 1024
+  }
+}

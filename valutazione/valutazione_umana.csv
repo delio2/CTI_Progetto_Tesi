@@ -1,0 +1,71 @@
+id;domanda;router;generale;parita;entrambe_inadeguate
+ioc_01;"Che cosa riportano le fonti sull'indirizzo IP 213.209.159.91?";1;0;0;0
+ioc_02;"Quali informazioni sono disponibili per l'IP 193.161.193.99?";1;0;0;0
+ioc_03;"L'indirizzo 31.56.209.62 compare fra gli indicatori raccolti?";1;0;0;0
+ioc_04;"Descrivi le evidenze collegate all'IP 89.163.135.20.";1;0;0;0
+ioc_05;"Che cosa si sa dell'indirizzo IP 176.65.139.43?";1;0;0;0
+ioc_06;"Quali segnalazioni riguardano il dominio lomtophamchese.com?";1;0;0;0
+ioc_07;"Il dominio klyvareno.com e presente nelle fonti?";1;0;0;0
+ioc_08;"Che cosa riportano le fonti sul dominio lobsterrakkos.com?";1;0;0;0
+ioc_09;"Mostra le evidenze disponibili per noviqerax.com.";1;0;0;0
+ioc_10;"Il dominio ostlomtophamchese.com e associato a minacce note?";0;1;0;0
+ioc_11;"Che cosa sai dell'URL http://62.60.226.185/v49922.exe?";1;0;0;0
+ioc_12;"Quali evidenze riguardano http://62.60.226.185/tu3929.exe?";0;0;0;1
+ioc_13;"L'URL http://62.60.226.185/t0907.exe compare nel corpus?";1;0;0;0
+ioc_14;"Descrivi le informazioni su https://217.60.195.113/test/riscv.";1;0;0;0
+ioc_15;"Che cosa riportano le fonti per https://217.60.195.113/test/x86_64?";1;0;0;0
+ioc_16;"Analizza la SHA-256 34f0612b6ceff640754500f6c0f4d70e385db4cbe1807fa6974808e9b66cbb96.";1;0;0;0
+ioc_17;"Che cosa si sa dell'impronta 0a4d85148ad5851b4db1fcd4337cad89d488151359dbdb98be518bff0e403cbd?";0;1;0;0
+ioc_18;"Cerca la SHA-256 eb68bdd63e187864711d98f6121bcb5f19d5483d0187150de77acc8a1097204f.";0;1;0;0
+ioc_19;"Quali evidenze esistono per 1ef8b6632e877e6a30e9325a245b8191fc3ede126b233234ff93bbee04e3cbaa?";0;0;1;0
+ioc_20;"L'hash 419d84ea0cbca1b972ba8f64aae0256104c7b5c9fa1fb938674ede05864451db e noto?";0;0;1;0
+malware_01;"Che cosa descrive il software ATT&CK S0002?";0;0;1;0
+malware_02;"Quali informazioni sono disponibili sul software S0029?";1;0;0;0
+malware_03;"Che cos'e il software S0039 secondo ATT&CK?";0;0;1;0
+malware_04;"Descrivi il software ATT&CK S0154.";0;0;1;0
+malware_05;"A che cosa corrisponde l'identificativo software S0357?";0;0;1;0
+malware_06;"Che cosa riporta ATT&CK sul software S0363?";0;0;0;1
+malware_07;"Spiega che cos'e il software S0013.";1;0;0;0
+malware_08;"Quale strumento e censito con l'ID S0097?";0;0;1;0
+malware_09;"Descrivi il software ATT&CK S0012.";0;1;0;0
+malware_10;"Che funzione ha il software identificato come S0100?";0;0;1;0
+malware_11;"Che cosa sai del software S0160?";0;0;1;0
+malware_12;"A quale utilita corrisponde S0057?";0;0;1;0
+malware_13;"Quali caratteristiche ha il software S0349?";0;0;1;0
+malware_14;"Che tipo di strumento e S0552?";0;0;0;1
+malware_15;"Descrivi il software identificato da ATT&CK come S0032.";0;0;1;0
+malware_16;"Quale software consente di estrarre credenziali Windows in chiaro ed e usato per verificare la sicurezza delle reti?";0;1;0;0
+malware_17;"Quale strumento gratuito di Microsoft permette di eseguire un programma su un altro computer?";0;1;0;0
+malware_18;"Quale raccolta open source scritta in Python costruisce e manipola protocolli di rete e include strumenti per Kerberos ed esecuzione remota?";0;0;0;1
+malware_19;"Quale framework open source di post-exploitation usa agenti PowerShell su Windows?";0;0;0;1
+malware_20;"Quale utilita a riga di comando raccoglie informazioni da Active Directory?";0;0;0;1
+attori_01;"Che cosa descrive la tecnica ATT&CK T1105?";0;1;0;0
+attori_02;"Spiega la tecnica T1082.";0;0;1;0
+attori_03;"Qual e il significato della sotto-tecnica T1071.001?";0;1;0;0
+attori_04;"Descrivi la sotto-tecnica T1059.003.";1;0;0;0
+attori_05;"Che cosa indica la tecnica T1083?";0;1;0;0
+attori_06;"Quali informazioni riporta ATT&CK sulla tecnica T1140?";0;1;0;0
+attori_07;"A quale comportamento corrisponde T1057?";1;0;0;0
+attori_08;"Spiega la sotto-tecnica T1070.004.";1;0;0;0
+attori_09;"Che cosa descrive la tecnica T1016?";0;1;0;0
+attori_10;"Qual e lo scopo della sotto-tecnica T1547.001?";0;1;0;0
+attori_11;"Che cosa sai del gruppo ATT&CK G0094?";0;1;0;0
+attori_12;"Descrivi il gruppo G0007.";1;0;0;0
+attori_13;"Quali informazioni sono disponibili sul gruppo G0032?";0;1;0;0
+attori_14;"A quale attore corrisponde l'ID G0016?";0;1;0;0
+attori_15;"Che cosa riporta ATT&CK sul gruppo G0096?";0;1;0;0
+attori_16;"Quale gruppo nordcoreano conduce attivita di spionaggio almeno dal 2012 e ha colpito organizzazioni governative e di ricerca?";0;0;0;1
+attori_17;"Quale gruppo e attribuito all'unita 26165 del servizio militare russo GRU?";0;0;0;1
+attori_18;"Quale tecnica ATT&CK descrive la cattura dello schermo del desktop durante un'operazione?";1;0;0;0
+attori_19;"Quale tecnica riguarda la modifica del Registro di Windows per esecuzione, persistenza o elusione?";1;0;0;0
+attori_20;"Quale sotto-tecnica usa email di spearphishing con un allegato malevolo per ottenere l'accesso?";1;0;0;0
+trasversale_01;"Quale campione corrisponde all'indicatore SHA-256 67643a051e8cda3cddb10e20281dd42961ea4fe754c316201670446748819718?";1;0;0;0
+trasversale_02;"Collega l'indicatore 3d195ba1802309316a5a54031e76cc666136cc21e01b97daf4a21a176ea5b3d3 al relativo campione malware.";0;0;1;0
+trasversale_03;"Che relazione esiste fra la SHA-256 ed130e3df72984c816fe23f9f61f0ae01478840d1227015df4e44685523abbd9 e un campione noto?";1;0;0;0
+trasversale_04;"Trova indicatore e campione associati alla SHA-256 5a67fd7e1f3bd5d1bca01efa7bd91407635d0c69e4d8924b0c4c87296dc11d40.";0;0;1;0
+trasversale_05;"Quale campione e collegato all'indicatore 7504898b17a9ce05eb9209128bcd0fb67d675a70c8c64f6f624d08b47b2fe3af?";0;0;1;0
+trasversale_06;"Che rapporto c'e fra il software S0002 e la tecnica T1003?";0;0;1;0
+trasversale_07;"Descrivi il software S0154 e il suo legame con la tecnica T1055.";0;0;0;1
+trasversale_08;"Il software S0357 usa la sotto-tecnica T1021.002? Riporta le evidenze disponibili.";0;0;1;0
+trasversale_09;"Analizza la SHA-256 67643a051e8cda3cddb10e20281dd42961ea4fe754c316201670446748819718 e spiega anche la tecnica T1059.001.";1;0;0;0
+trasversale_10;"Collega l'indicatore 3d195ba1802309316a5a54031e76cc666136cc21e01b97daf4a21a176ea5b3d3 al campione corrispondente e descrivi la tecnica T1105.";1;0;0;0

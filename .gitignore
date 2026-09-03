@@ -1,0 +1,45 @@
+# Variabili d'ambiente e segreti
+.env
+
+# Materiale locale non incluso nella consegna del codice.
+_lavoro/
+docs/
+tesi/
+
+# Acquisizioni di lavoro dalle fonti CTI: non versionate.
+data/raw/*
+
+# Eccezione: il manifest di ogni acquisizione, che pesa pochi kilobyte.
+# Gli snapshot veri non entrano nel repository: gli archivi completi delle fonti
+# superano i duecento megabyte, oltre il limite per singolo file di GitHub.
+# Versionare il solo manifest conserva comunque la verificabilità dichiarata fra
+# i requisiti, perché contiene il checksum SHA-256 di ciascun file: chiunque
+# disponga dello snapshot può accertare che sia quello su cui girano le misure,
+# e chi non lo ha sa esattamente cosa gli manca.
+!data/raw/manifest_*.json
+
+# Dati processati dalla pipeline Python
+data/processed/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Metadati generati dall'installazione del pacchetto in modalità sviluppo
+*.egg-info/
+
+# Artefatti creati soltanto durante verifiche momentanee.
+tmp/
+
+# Database locali
+*.sqlite
+*.db
+
+# Registro delle esecuzioni: è il verbale di ciò che è accaduto su questa
+# macchina, non un prodotto rigenerabile dallo snapshot. Si esclude la cartella
+# e non i due formati che oggi contiene, altrimenti un registro con un altro
+# nome vi entrerebbe senza che nessuno se ne accorga.
+logs/

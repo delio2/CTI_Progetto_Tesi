@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-08-26T12:39:02.962+02:00",
+  "sources": [
+    {
+      "source": "Malpedia",
+      "url": "https://malpedia.caad.fkie.fraunhofer.de/api/get/families",
+      "fetchedAt": "2026-08-26T10:39:01.548Z",
+      "fileName": "malpedia_2026-08-26.json",
+      "sha256": "32f82d5ade8259b85253aebc0a9d5835bc8a9f9a22f7150261bd586aeff78c1c",
+      "sizeBytes": 4822754
+    },
+    {
+      "source": "MalwareBazaar",
+      "url": "https://bazaar.abuse.ch/export/csv/full/",
+      "fetchedAt": "2026-08-26T10:37:59.301Z",
+      "fileName": "malwarebazaar_2026-08-26.zip",
+      "sha256": "b47f20aa11fedcc7fcce43376d546a7dda1e1b53df59617e7e9786c3c4f5d5a1",
+      "sizeBytes": 219907941
+    },
+    {
+      "source": "MITRE ATT&CK",
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/v19.2/enterprise-attack/enterprise-attack.json",
+      "fetchedAt": "2026-08-26T10:38:59.040Z",
+      "fileName": "mitre_attack_2026-08-26.json",
+      "sha256": "9bdb12439eb43bad6713199164550203a2ce8a0aa5866da12c8fbc6c8f8b0a42",
+      "sizeBytes": 47173813
+    },
+    {
+      "source": "AlienVault OTX (subscribed)",
+      "url": "https://otx.alienvault.com/api/v1/pulses/subscribed?limit=50",
+      "fetchedAt": "2026-08-26T10:38:49.992Z",
+      "fileName": "otx_subscribed_2026-08-26.json",
+      "sha256": "c1e6bb677e9982c10e120cfb472107b66f0eb44d47a405f7042486411d36063c",
+      "sizeBytes": 4355368
+    },
+    {
+      "source": "ThreatFox",
+      "url": "https://threatfox.abuse.ch/export/json/full/",
+      "fetchedAt": "2026-08-26T10:37:31.737Z",
+      "fileName": "threatfox_2026-08-26.json",
+      "sha256": "66fcbb6b70e5ad5df5456d40bef9ce4417039d923506e4d276d15c8e97afc913",
+      "sizeBytes": 62732371
+    },
+    {
+      "source": "URLhaus",
+      "url": "https://urlhaus.abuse.ch/downloads/json/",
+      "fetchedAt": "2026-08-26T10:38:05.724Z",
+      "fileName": "urlhaus_2026-08-26.json",
+      "sha256": "e76bffe7d6c857dff8d2043780d0ead1dbf2b09614fae344bed6c934e83dffb1",
+      "sizeBytes": 31575351
+    }
+  ]
+}

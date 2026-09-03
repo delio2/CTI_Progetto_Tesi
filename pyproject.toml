@@ -1,0 +1,35 @@
+[project]
+name = "pipeline-cti"
+version = "0.1.0"
+description = "Pipeline CTI con knowledge graph e recupero RAG specializzato"
+requires-python = ">=3.10"
+# Le major sono limitate per mantenere riproducibile l'ambiente della tesi.
+dependencies = [
+    "pydantic>=2,<3",
+    "neo4j>=5,<7",
+    # Contratto Retriever e contenitori dei risultati.
+    "neo4j-graphrag>=1.18,<2",
+    "sentence-transformers>=6,<7",
+    # Usato direttamente per verificare CUDA.
+    "torch>=2,<3",
+    # La 1.2.3 ha una regressione nella fusione dello stato.
+    "langgraph>=1.2,!=1.2.3,<2",
+    # Client locale con output vincolati agli schemi Pydantic.
+    "ollama>=0.6,<1",
+    # Interfaccia dimostrativa del prototipo.
+    "streamlit>=1.62,<2",
+    # Grafici statici della valutazione sperimentale.
+    "matplotlib>=3.11,<4",
+]
+
+[project.optional-dependencies]
+sviluppo = [
+    "pytest>=8,<10",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,92 @@
+{
+  "1884014": [
+    {
+      "ioc_value": "tec-way.ch",
+      "ioc_type": "domain",
+      "threat_type": "payload_delivery",
+      "malware": "js.clearfake",
+      "malware_alias": null,
+      "malware_printable": "ClearFake",
+      "first_seen_utc": "2026-08-21 23:27:20",
+      "last_seen_utc": null,
+      "confidence_level": 90,
+      "is_compromised": true,
+      "reference": null,
+      "tags": "compromised,EtherHide",
+      "anonymous": 1,
+      "reporter": "anonymous"
+    }
+  ],
+  "1884013": [
+    {
+      "ioc_value": "64.90.19.141:6088",
+      "ioc_type": "ip:port",
+      "threat_type": "botnet_cc",
+      "malware": "win.valley_rat",
+      "malware_alias": "Winos",
+      "malware_printable": "ValleyRAT",
+      "first_seen_utc": "2026-08-21 23:10:17",
+      "last_seen_utc": null,
+      "confidence_level": 100,
+      "is_compromised": false,
+      "reference": null,
+      "tags": "RAT,ValleyRAT",
+      "anonymous": 0,
+      "reporter": "abuse_ch"
+    }
+  ],
+  "1883964": [
+    {
+      "ioc_value": "31.59.41.79:7443",
+      "ioc_type": "ip:port",
+      "threat_type": "botnet_cc",
+      "malware": "unknown",
+      "malware_alias": null,
+      "malware_printable": "Unknown malware",
+      "first_seen_utc": "2026-08-21 19:46:06",
+      "last_seen_utc": "2026-08-21 22:45:54",
+      "confidence_level": 75,
+      "is_compromised": false,
+      "reference": null,
+      "tags": "drb-ra,Mythic",
+      "anonymous": 0,
+      "reporter": "abuse_ch"
+    }
+  ],
+  "1856449": [
+    {
+      "ioc_value": "c38117d47d5f0051ca68f32fb9ffcfeb",
+      "ioc_type": "md5_hash",
+      "threat_type": "payload",
+      "malware": "win.mirai",
+      "malware_alias": null,
+      "malware_printable": "Mirai",
+      "first_seen_utc": "2026-07-24 01:05:50",
+      "last_seen_utc": null,
+      "confidence_level": 95,
+      "is_compromised": false,
+      "reference": null,
+      "tags": null,
+      "anonymous": 0,
+      "reporter": "Grim"
+    }
+  ],
+  "1883109": [
+    {
+      "ioc_value": "c1c6011ad508835c5f06c76f8957c7ac5dd6525ff5f85b95e50e56cf0b594448",
+      "ioc_type": "sha256_hash",
+      "threat_type": "payload",
+      "malware": "elf.mirai",
+      "malware_alias": "Katana",
+      "malware_printable": "Mirai",
+      "first_seen_utc": "2026-08-20 13:15:00",
+      "last_seen_utc": null,
+      "confidence_level": 80,
+      "is_compromised": false,
+      "reference": "https://honeylabs.net/lookup/91.92.47.97",
+      "tags": "elf,iot",
+      "anonymous": 0,
+      "reporter": "HoneyLabs"
+    }
+  ]
+}

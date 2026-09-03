@@ -1,0 +1,451 @@
+{
+  "type": "bundle",
+  "id": "bundle--campione",
+  "spec_version": "2.0",
+  "objects": [
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--0042a9f5-f053-4769-b3ef-9ad018dfa298",
+      "created": "2020-01-14T17:18:32.126Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/techniques/T1055/011",
+          "external_id": "T1055.011"
+        },
+        {
+          "source_name": "Elastic Process Injection July 2017",
+          "description": "Hosseini, A. (2017, July 18). Ten Process Injection Techniques: A Technical Survey Of Common And Trending Process Injection Techniques. Retrieved December 7, 2017.",
+          "url": "https://www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"
+        },
+        {
+          "source_name": "MalwareTech Power Loader Aug 2013",
+          "description": "MalwareTech. (2013, August 13). PowerLoader Injection – Something truly amazing. Retrieved December 16, 2017.",
+          "url": "https://www.malwaretech.com/2013/08/powerloader-injection-something-truly.html"
+        },
+        {
+          "source_name": "WeLiveSecurity Gapz and Redyms Mar 2013",
+          "description": "Matrosov, A. (2013, March 19). Gapz and Redyms droppers based on Power Loader code. Retrieved December 16, 2017.",
+          "url": "https://www.welivesecurity.com/2013/03/19/gapz-and-redyms-droppers-based-on-power-loader-code/"
+        },
+        {
+          "source_name": "Microsoft Window Classes",
+          "description": "Microsoft. (n.d.). About Window Classes. Retrieved December 16, 2017.",
+          "url": "https://msdn.microsoft.com/library/windows/desktop/ms633574.aspx"
+        },
+        {
+          "source_name": "Microsoft GetWindowLong function",
+          "description": "Microsoft. (n.d.). GetWindowLong function. Retrieved December 16, 2017.",
+          "url": "https://msdn.microsoft.com/library/windows/desktop/ms633584.aspx"
+        },
+        {
+          "source_name": "Microsoft SetWindowLong function",
+          "description": "Microsoft. (n.d.). SetWindowLong function. Retrieved December 16, 2017.",
+          "url": "https://msdn.microsoft.com/library/windows/desktop/ms633591.aspx"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-05-12T15:12:00.617Z",
+      "name": "Extra Window Memory Injection",
+      "description": "Adversaries may inject malicious code into process via Extra Window Memory (EWM) in order to evade process-based defenses as well as possibly elevate privileges. EWM injection is a method of executing arbitrary code in the address space of a separate live process. \n\nBefore creating a window, graphical Windows-based processes must prescribe to or register a windows class, which stipulate appearance and behavior (via windows procedures, which are functions that handle input/output of data).(Citation: Microsoft Window Classes) Registration of new windows classes can include a request for up to 40 bytes of EWM to be appended to the allocated memory of each instance of that class. This EWM is intended to store data specific to that window and has specific application programming interface (API) functions to set and get its value. (Citation: Microsoft GetWindowLong function) (Citation: Microsoft SetWindowLong function)\n\nAlthough small, the EWM is large enough to store a 32-bit pointer and is often used to point to a windows procedure. Malware may possibly utilize this memory location in part of an attack chain that includes writing code to shared sections of the process’s memory, placing a pointer to the code in EWM, then invoking execution by returning execution control to the address in the process’s EWM.\n\nExecution granted through EWM injection may allow access to both the target process's memory and possibly elevated privileges. Writing payloads to shared sections also avoids the use of highly monitored API calls such as <code>WriteProcessMemory</code> and <code>CreateRemoteThread</code>.(Citation: Elastic Process Injection July 2017) More sophisticated malware samples may also potentially bypass protection mechanisms such as data execution prevention (DEP) by triggering a combination of windows procedures and other system functions that will rewrite the malicious payload inside an executable portion of the target process.  (Citation: MalwareTech Power Loader Aug 2013) (Citation: WeLiveSecurity Gapz and Redyms Mar 2013)\n\nRunning code in the context of another process may allow access to the process's memory, system/network resources, and possibly elevated privileges. Execution via EWM injection may also evade detection from security products since the execution is masked under a legitimate process. ",
+      "kill_chain_phases": [
+        {
+          "kill_chain_name": "mitre-attack",
+          "phase_name": "stealth"
+        },
+        {
+          "kill_chain_name": "mitre-attack",
+          "phase_name": "privilege-escalation"
+        }
+      ],
+      "x_mitre_attack_spec_version": "3.3.0",
+      "x_mitre_deprecated": false,
+      "x_mitre_domains": [
+        "enterprise-attack"
+      ],
+      "x_mitre_is_subtechnique": true,
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_platforms": [
+        "Windows"
+      ],
+      "x_mitre_version": "2.0"
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--01a5a209-b94c-450b-b7f9-946497d91055",
+      "created": "2017-05-31T21:30:44.329Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/techniques/T1047",
+          "external_id": "T1047"
+        },
+        {
+          "source_name": "FireEye WMI 2015",
+          "description": "Ballenthin, W., et al. (2015). Windows Management Instrumentation (WMI) Offense, Defense, and Forensics. Retrieved March 30, 2016.",
+          "url": "https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/wp-windows-management-instrumentation.pdf"
+        },
+        {
+          "source_name": "Mandiant WMI",
+          "description": "Mandiant. (n.d.). Retrieved February 13, 2024.",
+          "url": "https://www.mandiant.com/resources/reports"
+        },
+        {
+          "source_name": "WMI 6",
+          "description": "Microsoft. (2022, June 13). BlackCat. Retrieved February 13, 2024.",
+          "url": "https://www.microsoft.com/en-us/security/blog/2022/06/13/the-many-lives-of-blackcat-ransomware/"
+        },
+        {
+          "source_name": "WMI 1-3",
+          "description": "Microsoft. (2023, March 7). Retrieved February 13, 2024.",
+          "url": "https://learn.microsoft.com/en-us/windows/win32/wmisdk/wmi-start-page?redirectedfrom=MSDN"
+        },
+        {
+          "source_name": "WMI 7,8",
+          "description": "Microsoft. (2024, January 26). WMIC Deprecation. Retrieved February 13, 2024.",
+          "url": "https://techcommunity.microsoft.com/t5/windows-it-pro-blog/wmi-command-line-wmic-utility-deprecation-next-steps/ba-p/4039242"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-05-12T15:12:00.619Z",
+      "name": "Windows Management Instrumentation",
+      "description": "Adversaries may abuse Windows Management Instrumentation (WMI) to execute malicious commands and payloads. WMI is designed for programmers and is the infrastructure for management data and operations on Windows systems.(Citation: WMI 1-3) WMI is an administration feature that provides a uniform environment to access Windows system components.\n\nThe WMI service enables both local and remote access, though the latter is facilitated by [Remote Services](https://attack.mitre.org/techniques/T1021) such as [Distributed Component Object Model](https://attack.mitre.org/techniques/T1021/003) and [Windows Remote Management](https://attack.mitre.org/techniques/T1021/006).(Citation: WMI 1-3) Remote WMI over DCOM operates using port 135, whereas WMI over WinRM operates over port 5985 when using HTTP and 5986 for HTTPS.(Citation: WMI 1-3) (Citation: Mandiant WMI)\n\nAn adversary can use WMI to interact with local and remote systems and use it as a means to execute various behaviors, such as gathering information for [Discovery](https://attack.mitre.org/tactics/TA0007) as well as [Execution](https://attack.mitre.org/tactics/TA0002) of commands and payloads.(Citation: Mandiant WMI) For example, `wmic.exe` can be abused by an adversary to delete shadow copies with the command `wmic.exe Shadowcopy Delete` (i.e., [Inhibit System Recovery](https://attack.mitre.org/techniques/T1490)).(Citation: WMI 6)\n\n**Note:** `wmic.exe` is deprecated as of January of 2024, with the WMIC feature being “disabled by default” on Windows 11+. WMIC will be removed from subsequent Windows releases and replaced by [PowerShell](https://attack.mitre.org/techniques/T1059/001) as the primary WMI interface.(Citation: WMI 7,8) In addition to PowerShell and tools like `wbemtool.exe`, COM APIs can also be used to programmatically interact with WMI via C++, .NET, VBScript, etc.(Citation: WMI 7,8)",
+      "kill_chain_phases": [
+        {
+          "kill_chain_name": "mitre-attack",
+          "phase_name": "execution"
+        }
+      ],
+      "x_mitre_attack_spec_version": "3.3.0",
+      "x_mitre_contributors": [
+        "@ionstorm",
+        "Olaf Hartong, Falcon Force",
+        "Tristan Madani"
+      ],
+      "x_mitre_deprecated": false,
+      "x_mitre_domains": [
+        "enterprise-attack"
+      ],
+      "x_mitre_is_subtechnique": false,
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_platforms": [
+        "Windows"
+      ],
+      "x_mitre_version": "1.6",
+      "x_mitre_remote_support": false
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--00d0b012-8a03-410e-95de-5826bf542de6",
+      "created": "2017-05-31T21:30:54.176Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": true,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/techniques/T1066",
+          "external_id": "T1066"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-04-14T22:53:15.802Z",
+      "name": "Indicator Removal from Tools",
+      "description": "If a malicious tool is detected and quarantined or otherwise curtailed, an adversary may be able to determine why the malicious tool was detected (the indicator), modify the tool by removing the indicator, and use the updated version that is no longer detected by the target's defensive systems or subsequent targets that may use similar systems.\n\nA good example of this is when malware is detected with a file signature and quarantined by anti-virus software. An adversary who can determine that the malware was quarantined because of its file signature may use [Software Packing](https://attack.mitre.org/techniques/T1045) or otherwise modify the file so it has a different signature, and then re-use the malware.",
+      "kill_chain_phases": [
+        {
+          "kill_chain_name": "mitre-attack",
+          "phase_name": "stealth"
+        }
+      ],
+      "x_mitre_attack_spec_version": "3.2.0",
+      "x_mitre_deprecated": false,
+      "x_mitre_domains": [
+        "enterprise-attack"
+      ],
+      "x_mitre_is_subtechnique": false,
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_platforms": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "x_mitre_version": "1.1"
+    },
+    {
+      "type": "intrusion-set",
+      "id": "intrusion-set--00f67a77-86a4-4adf-be26-1a54fc713340",
+      "created": "2019-01-29T21:27:24.793Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/groups/G0082",
+          "external_id": "G0082"
+        },
+        {
+          "source_name": "BeagleBoyz",
+          "description": "(Citation: CISA AA20-239A BeagleBoyz August 2020)"
+        },
+        {
+          "source_name": "Stardust Chollima",
+          "description": "(Citation: CrowdStrike Stardust Chollima Profile April 2018)(Citation: CrowdStrike GTR 2021 June 2021)"
+        },
+        {
+          "source_name": "APT38",
+          "description": "(Citation: FireEye APT38 Oct 2018)"
+        },
+        {
+          "source_name": "Bluenoroff",
+          "description": "(Citation: Kaspersky Lazarus Under The Hood Blog 2017)"
+        },
+        {
+          "source_name": "Sapphire Sleet",
+          "description": "(Citation: Microsoft Threat Actor Naming July 2023)"
+        },
+        {
+          "source_name": "COPERNICIUM",
+          "description": "(Citation: Microsoft Threat Actor Naming July 2023)"
+        },
+        {
+          "source_name": "NICKEL GLADSTONE",
+          "description": "(Citation: SecureWorks NICKEL GLADSTONE profile Sept 2021)"
+        },
+        {
+          "source_name": "CrowdStrike GTR 2021 June 2021",
+          "description": "CrowdStrike. (2021, June 7). CrowdStrike 2021 Global Threat Report. Retrieved September 29, 2021.",
+          "url": "https://go.crowdstrike.com/rs/281-OBQ-266/images/Report2021GTR.pdf"
+        },
+        {
+          "source_name": "DOJ North Korea Indictment Feb 2021",
+          "description": "Department of Justice. (2021, February 17). Three North Korean Military Hackers Indicted in Wide-Ranging Scheme to Commit Cyberattacks and Financial Crimes Across the Globe. Retrieved June 9, 2021.",
+          "url": "https://www.justice.gov/opa/pr/three-north-korean-military-hackers-indicted-wide-ranging-scheme-commit-cyberattacks-and"
+        },
+        {
+          "source_name": "CISA AA20-239A BeagleBoyz August 2020",
+          "description": "DHS/CISA. (2020, August 26). FASTCash 2.0: North Korea's BeagleBoyz Robbing Banks. Retrieved September 29, 2021.",
+          "url": "https://us-cert.cisa.gov/ncas/alerts/aa20-239a"
+        },
+        {
+          "source_name": "FireEye APT38 Oct 2018",
+          "description": "FireEye. (2018, October 03). APT38: Un-usual Suspects. Retrieved November 17, 2024.",
+          "url": "https://services.google.com/fh/files/misc/apt38-un-usual-suspects.pdf"
+        },
+        {
+          "source_name": "Kaspersky Lazarus Under The Hood Blog 2017",
+          "description": "GReAT. (2017, April 3). Lazarus Under the Hood. Retrieved April 17, 2019.",
+          "url": "https://securelist.com/lazarus-under-the-hood/77908/"
+        },
+        {
+          "source_name": "CrowdStrike Stardust Chollima Profile April 2018",
+          "description": "Meyers, Adam. (2018, April 6). Meet CrowdStrike’s Adversary of the Month for April: STARDUST CHOLLIMA. Retrieved September 29, 2021.",
+          "url": "https://www.crowdstrike.com/blog/meet-crowdstrikes-adversary-of-the-month-for-april-stardust-chollima/"
+        },
+        {
+          "source_name": "Microsoft Threat Actor Naming July 2023",
+          "description": "Microsoft . (2023, July 12). How Microsoft names threat actors. Retrieved November 17, 2023.",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/security/intelligence/microsoft-threat-actor-naming?view=o365-worldwide"
+        },
+        {
+          "source_name": "SecureWorks NICKEL GLADSTONE profile Sept 2021",
+          "description": "SecureWorks. (2021, September 29). NICKEL GLADSTONE Threat Profile. Retrieved September 29, 2021.",
+          "url": "https://www.secureworks.com/research/threat-profiles/nickel-gladstone"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-07-31T20:48:22.752Z",
+      "name": "APT38",
+      "description": "[APT38](https://attack.mitre.org/groups/G0082) is a North Korean state-sponsored threat group that specializes in financial cyber operations; it has been attributed to the Reconnaissance General Bureau.(Citation: CISA AA20-239A BeagleBoyz August 2020) Active since at least 2014, [APT38](https://attack.mitre.org/groups/G0082) has targeted banks, financial institutions, casinos, cryptocurrency exchanges, SWIFT system endpoints, and ATMs in at least 38 countries worldwide. Significant operations include the 2016 Bank of Bangladesh heist, during which [APT38](https://attack.mitre.org/groups/G0082) stole $81 million, as well as attacks against Bancomext (Citation: FireEye APT38 Oct 2018) and Banco de Chile (Citation: FireEye APT38 Oct 2018); some of their attacks have been destructive.(Citation: CISA AA20-239A BeagleBoyz August 2020)(Citation: FireEye APT38 Oct 2018)(Citation: DOJ North Korea Indictment Feb 2021)(Citation: Kaspersky Lazarus Under The Hood Blog 2017)\n\nNorth Korean group definitions are known to have significant overlap, and some security researchers report all North Korean state-sponsored cyber activity under the name [Lazarus Group](https://attack.mitre.org/groups/G0032) instead of tracking clusters or subgroups.",
+      "aliases": [
+        "APT38",
+        "NICKEL GLADSTONE",
+        "BeagleBoyz",
+        "Bluenoroff",
+        "Stardust Chollima",
+        "Sapphire Sleet",
+        "COPERNICIUM"
+      ],
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_deprecated": false,
+      "x_mitre_domains": [
+        "enterprise-attack",
+        "ics-attack"
+      ],
+      "x_mitre_version": "3.1",
+      "x_mitre_attack_spec_version": "3.3.0",
+      "x_mitre_contributors": [
+        "Hiroki Nagahama, NEC Corporation",
+        "Manikantan Srinivasan, NEC Corporation India",
+        "Pooja Natarajan, NEC Corporation India"
+      ]
+    },
+    {
+      "type": "malware",
+      "id": "malware--007b44b6-e4c5-480b-b5b9-56f2081b1b7b",
+      "created": "2017-05-31T21:32:40.801Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/software/S0061",
+          "external_id": "S0061"
+        },
+        {
+          "source_name": "Baumgartner Naikon 2015",
+          "description": "Baumgartner, K., Golovkin, M.. (2015, May). The MsnMM Campaigns: The Earliest Naikon APT Campaigns. Retrieved April 10, 2019.",
+          "url": "https://media.kasperskycontenthub.com/wp-content/uploads/sites/43/2018/03/07205555/TheNaikonAPT-MsnMM1.pdf"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2025-04-16T20:37:51.573Z",
+      "name": "HDoor",
+      "description": "[HDoor](https://attack.mitre.org/software/S0061) is malware that has been customized and used by the [Naikon](https://attack.mitre.org/groups/G0019) group. (Citation: Baumgartner Naikon 2015)",
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_platforms": [
+        "Windows"
+      ],
+      "x_mitre_deprecated": false,
+      "x_mitre_domains": [
+        "enterprise-attack"
+      ],
+      "x_mitre_version": "1.0",
+      "x_mitre_attack_spec_version": "3.2.0",
+      "x_mitre_aliases": [
+        "HDoor",
+        "Custom HDoor"
+      ],
+      "labels": [
+        "malware"
+      ]
+    },
+    {
+      "type": "tool",
+      "id": "tool--03342581-f790-4f03-ba41-e82e67392e23",
+      "created": "2017-05-31T21:32:31.601Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/software/S0039",
+          "external_id": "S0039"
+        },
+        {
+          "source_name": "Microsoft Net Utility",
+          "description": "Microsoft. (2006, October 18). Net.exe Utility. Retrieved September 22, 2015.",
+          "url": "https://msdn.microsoft.com/en-us/library/aa939914"
+        },
+        {
+          "source_name": "Savill 1999",
+          "description": "Savill, J. (1999, March 4). Net.exe reference. Retrieved September 22, 2015.",
+          "url": "https://web.archive.org/web/20150511162820/http://windowsitpro.com/windows/netexe-reference"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-05-12T15:12:00.740Z",
+      "name": "Net",
+      "description": "The [Net](https://attack.mitre.org/software/S0039) utility is a component of the Windows operating system. It is used in command-line operations for control of users, groups, services, and network connections. (Citation: Microsoft Net Utility)\n\n[Net](https://attack.mitre.org/software/S0039) has a great deal of functionality, (Citation: Savill 1999) much of which is useful for an adversary, such as gathering system and network information for Discovery, moving laterally through [SMB/Windows Admin Shares](https://attack.mitre.org/techniques/T1021/002) using <code>net use</code> commands, and interacting with services. The net1.exe utility is executed for certain functionality when net.exe is run and can be used directly in commands such as <code>net1 user</code>.",
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_platforms": [
+        "Windows"
+      ],
+      "x_mitre_deprecated": false,
+      "x_mitre_domains": [
+        "enterprise-attack"
+      ],
+      "x_mitre_version": "2.8",
+      "x_mitre_attack_spec_version": "3.3.0",
+      "x_mitre_contributors": [
+        "David Ferguson, CyberSponse"
+      ],
+      "x_mitre_aliases": [
+        "Net",
+        "net.exe"
+      ],
+      "labels": [
+        "tool"
+      ]
+    },
+    {
+      "type": "intrusion-set",
+      "id": "intrusion-set--23b6a0f5-fa95-46f9-a6f3-4549c5e45ec8",
+      "created": "2017-05-31T21:31:51.643Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "url": "https://attack.mitre.org/groups/G0014",
+          "external_id": "G0014"
+        },
+        {
+          "source_name": "Night Dragon",
+          "description": "(Citation: McAfee Night Dragon)"
+        },
+        {
+          "source_name": "McAfee Night Dragon",
+          "description": "McAfee® Foundstone® Professional Services and McAfee Labs™. (2011, February 10). Global Energy Cyberattacks: “Night Dragon”. Retrieved February 19, 2018.",
+          "url": "https://scadahacker.com/library/Documents/Cyber_Events/McAfee%20-%20Night%20Dragon%20-%20Global%20Energy%20Cyberattacks.pdf"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-07-31T18:48:41.283Z",
+      "name": "Night Dragon",
+      "description": "[Night Dragon](https://attack.mitre.org/groups/G0014) is a campaign name for activity involving a threat group that has conducted activity originating primarily in China. (Citation: McAfee Night Dragon)",
+      "aliases": [
+        "Night Dragon"
+      ],
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_deprecated": true,
+      "x_mitre_version": "1.4",
+      "x_mitre_attack_spec_version": "3.2.0",
+      "x_mitre_domains": [
+        "enterprise-attack"
+      ]
+    },
+    {
+      "type": "relationship",
+      "id": "relationship--04791b5e-1795-4a1c-a10d-71f919fc420e",
+      "created": "2023-03-17T15:57:46.896Z",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "revoked": false,
+      "external_references": [
+        {
+          "source_name": "ClearSky Lazarus Aug 2020",
+          "description": "ClearSky Research Team. (2020, August 13). Operation 'Dream Job' Widespread North Korean Espionage Campaign. Retrieved December 20, 2021.",
+          "url": "https://www.clearskysec.com/wp-content/uploads/2020/08/Dream-Job-Campaign.pdf"
+        }
+      ],
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "modified": "2026-07-31T21:14:22.369Z",
+      "description": "During [Operation Dream Job](https://attack.mitre.org/campaigns/C0022), [Lazarus Group](https://attack.mitre.org/groups/G0032) deployed malware designed not to run on computers set to Korean, Japanese, or Chinese in Windows language preferences.(Citation: ClearSky Lazarus Aug 2020)",
+      "relationship_type": "uses",
+      "source_ref": "campaign--0257b35b-93ef-4a70-80dd-ad5258e6045b",
+      "target_ref": "attack-pattern--c1b68a96-3c48-49ea-a6c0-9b27359f9c19",
+      "x_mitre_modified_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "x_mitre_deprecated": false,
+      "x_mitre_attack_spec_version": "3.3.0"
+    }
+  ]
+}

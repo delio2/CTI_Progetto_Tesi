@@ -1,0 +1,76 @@
+{
+  "win.emotet": {
+    "urls": [
+      "http://blog.fortinet.com/2017/05/03/deep-analysis-of-new-emotet-variant-part-1",
+      "http://blog.trendmicro.com/trendlabs-security-intelligence/emotet-returns-starts-spreading-via-spam-botnet/"
+    ],
+    "uuid": "d29eb927-d53d-4af2-b6ce-17b3a1b34fe7",
+    "notes": [],
+    "sources": [],
+    "updated": "2026-04-22",
+    "alt_names": [
+      "Geodo",
+      "Heodo"
+    ],
+    "attribution": [
+      "GOLD CABIN",
+      "MUMMY SPIDER",
+      "Mealybug"
+    ],
+    "common_name": "Emotet",
+    "description": "While Emotet historically was a banking malware organized in a botnet, nowadays Emotet is mostly seen as infrastructure as a service for content delivery. For example, since mid 2018 it is used by Trickbot for installs, which may also lead to ransomware attacks using Ryuk, a combination observed several times against high-profile targets.\r\nIt is always stealing information from victims but what the criminal gang behind it did, was to open up another business channel by selling their infrastructure delivering additional malicious software. From malware analysts it has been classified into epochs depending on command and control, payloads, and delivery solutions which change over time.\r\nEmotet had been taken down by authorities in January 2021, though it appears to have sprung back to life in November 2021.",
+    "library_entries": [
+      "471:20200414:understanding:ca95961"
+    ]
+  },
+  "apk.aberebot": {
+    "urls": [
+      "https://blog.cyble.com/2021/07/30/aberebot-on-the-rise-new-banking-trojan-targeting-users-through-phishing/",
+      "https://blog.cyble.com/2022/03/10/aberebot-returns-as-escobar/"
+    ],
+    "uuid": "4b9c0228-2bfd-4bc7-bd64-8357a2da12ee",
+    "notes": [],
+    "sources": [],
+    "updated": "2025-01-27",
+    "alt_names": [
+      "Escobar"
+    ],
+    "attribution": [],
+    "common_name": "Aberebot",
+    "description": "",
+    "library_entries": [
+      "babuder:20220314:nasty:8cfc0e3"
+    ]
+  },
+  "aix.fastcash": {
+    "urls": [
+      "https://blog.lexfo.fr/ressources/Lexfo-WhitePaper-The_Lazarus_Constellation.pdf",
+      "https://blog.talosintelligence.com/2019/05/10-years-of-virtual-dynamite.html"
+    ],
+    "uuid": "e8a04177-6a91-46a6-9f63-6a9fac4dfa02",
+    "notes": [],
+    "sources": [],
+    "updated": "2024-12-09",
+    "alt_names": [],
+    "attribution": [
+      "Lazarus Group"
+    ],
+    "common_name": "FastCash",
+    "description": "",
+    "library_entries": [
+      "boldewin:20181231:fastcashmalwaredissected:d72e332"
+    ]
+  },
+  "elf.corona": {
+    "urls": [],
+    "uuid": "",
+    "notes": [],
+    "sources": [],
+    "updated": "",
+    "alt_names": [],
+    "attribution": [],
+    "common_name": "",
+    "description": "",
+    "library_entries": []
+  }
+}

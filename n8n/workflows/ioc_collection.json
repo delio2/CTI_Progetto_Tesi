@@ -1,0 +1,680 @@
+{
+  "name": "CTI - Collection e Snapshot",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        3472,
+        1760
+      ],
+      "id": "e8ac613a-7559-43c0-9784-9fbe3e8433f2",
+      "name": "Schedule - Daily IOC Fetch"
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/v19.2/enterprise-attack/enterprise-attack.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3696,
+        2128
+      ],
+      "id": "4cc0dd53-cade-4b67-810b-11d554c90529",
+      "name": "MITRE ATTACK"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst fs = require('fs');\n\n// L'archivio e gia stato scritto dal nodo precedente: l'impronta si calcola\n// rileggendolo dal disco a blocchi di quattro megabyte, cosi la memoria\n// occupata non dipende dalla sua dimensione. E anche piu fedele, perche\n// certifica il file che la normalizzazione rileggera e non una copia\n// intermedia tenuta in memoria.\nconst oggi = $now.toFormat('yyyy-MM-dd');\nconst fileName = `malwarebazaar_${oggi}.zip`;\nconst percorso = `/data/raw/${fileName}`;\n\nconst impronta = crypto.createHash('sha256');\nconst flusso = fs.createReadStream(percorso, { highWaterMark: 4 * 1024 * 1024 });\nawait new Promise((completa, fallisci) => {\n  flusso.on('data', blocco => impronta.update(blocco));\n  flusso.on('end', completa);\n  flusso.on('error', fallisci);\n});\n\nreturn [{\n  json: {\n    source: 'MalwareBazaar',\n    url: 'https://bazaar.abuse.ch/export/csv/full/',\n    fetchedAt: $now.toISO(),\n    fileName,\n    sha256: impronta.digest('hex'),\n    sizeBytes: fs.statSync(percorso).size\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4128,
+        1568
+      ],
+      "id": "69681e29-cd51-4913-b6f1-5797cff037b0",
+      "name": "Impronta MalwareBazaar"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\n// Il nodo di decompressione espone il contenuto in un campo binario che porta\n// il nome del file trovato dentro l'archivio: lo si ricava invece di cablarlo,\n// perche dipende da come la fonte confeziona lo ZIP.\nconst campo = Object.keys($input.first().binary)[0];\nconst buffer = await this.helpers.getBinaryDataBuffer(0, campo);\nconst data = buffer.toString('utf8');\n\nconst sha256 = crypto.createHash('sha256').update(data, 'utf8').digest('hex');\nconst binary = Buffer.from(data, 'utf8').toString('base64');\nconst today = $now.toFormat('yyyy-MM-dd');  // stesso fuso dei nodi che scrivono i file\nconst fileName = `threatfox_${today}.json`;\n\nreturn [{\n  json: {\n    source: 'ThreatFox',\n    url: 'https://threatfox.abuse.ch/export/json/full/',\n    fetchedAt: $now.toISO(),\n    fileName,\n    sha256,\n    sizeBytes: Buffer.byteLength(data, 'utf8')\n  },\n  binary: {\n    data: { data: binary, mimeType: 'application/json', fileName }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4000,
+        1408
+      ],
+      "id": "724d1848-0438-4510-85fa-1a98565930a9",
+      "name": "Encode ThreatFox to Base64"
+    },
+    {
+      "parameters": {
+        "url": "https://urlhaus.abuse.ch/downloads/json/",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3712,
+        1760
+      ],
+      "id": "a1f4c2e8-3b7d-4e91-8c25-6f0a9d3b1e47",
+      "name": "URLhaus - Archivio completo",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        3856,
+        1760
+      ],
+      "id": "b2e5d3f9-4c8e-4fa2-9d36-7a1b0e4c2f58",
+      "name": "estrarre lo ZIP URLhaus"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\n// Il nodo di decompressione espone il contenuto in un campo binario che porta\n// il nome del file trovato dentro l'archivio: lo si ricava invece di cablarlo,\n// perche dipende da come la fonte confeziona lo ZIP.\nconst campo = Object.keys($input.first().binary)[0];\nconst buffer = await this.helpers.getBinaryDataBuffer(0, campo);\nconst data = buffer.toString('utf8');\n\nconst sha256 = crypto.createHash('sha256').update(data, 'utf8').digest('hex');\nconst binary = Buffer.from(data, 'utf8').toString('base64');\nconst today = $now.toFormat('yyyy-MM-dd');  // stesso fuso dei nodi che scrivono i file\nconst fileName = `urlhaus_${today}.json`;\n\nreturn [{\n  json: {\n    source: 'URLhaus',\n    url: 'https://urlhaus.abuse.ch/downloads/json/',\n    fetchedAt: $now.toISO(),\n    fileName,\n    sha256,\n    sizeBytes: Buffer.byteLength(data, 'utf8')\n  },\n  binary: {\n    data: { data: binary, mimeType: 'application/json', fileName }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4000,
+        1760
+      ],
+      "id": "c3f6e4a0-5d9f-4ab3-ae47-8b2c1f5d3a69",
+      "name": "Encode URLhaus to Base64"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/urlhaus_{{ $now.format('yyyy-MM-dd') }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4144,
+        1760
+      ],
+      "id": "d4a7f5b1-6e0a-4bc4-bf58-9c3d2a6e4b7a",
+      "name": "Write URLhaus Snapshot"
+    },
+    {
+      "parameters": {
+        "url": "https://malpedia.caad.fkie.fraunhofer.de/api/get/families",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3696,
+        2304
+      ],
+      "id": "e5b8a6c2-7f1b-4cd5-8069-ad4e3b7f5c8b",
+      "name": "Malpedia - Famiglie",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\n// La fonte risponde con un oggetto solo, che ha una chiave per famiglia: si\n// riscrive indentato come si fa con ATT&CK, cosi il file grezzo resta leggibile\n// a chi lo apra per verificare una singola voce.\nconst data = JSON.stringify($input.first().json, null, 2);\nconst sha256 = crypto.createHash('sha256').update(data, 'utf8').digest('hex');\nconst binary = Buffer.from(data, 'utf8').toString('base64');\nconst today = $now.toFormat('yyyy-MM-dd');  // stesso fuso dei nodi che scrivono i file\nconst fileName = `malpedia_${today}.json`;\n\nreturn [{\n  json: {\n    source: 'Malpedia',\n    url: 'https://malpedia.caad.fkie.fraunhofer.de/api/get/families',\n    fetchedAt: $now.toISO(),\n    fileName,\n    sha256,\n    sizeBytes: Buffer.byteLength(data, 'utf8')\n  },\n  binary: {\n    data: { data: binary, mimeType: 'application/json', fileName }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3920,
+        2304
+      ],
+      "id": "f6c9b7d3-8a2c-4de6-917a-be5f4c8a6d9c",
+      "name": "Encode Malpedia to Base64"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/malpedia_{{ $now.format('yyyy-MM-dd') }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4144,
+        2304
+      ],
+      "id": "07dac8e4-9b3d-4ef7-a28b-cf605d9b7e0d",
+      "name": "Write Malpedia Snapshot"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst data = JSON.stringify($input.first().json, null, 2);\nconst sha256 = crypto.createHash('sha256').update(data, 'utf8').digest('hex');\nconst binary = Buffer.from(data, 'utf8').toString('base64');\nconst today = $now.toFormat('yyyy-MM-dd');  // stesso fuso dei nodi che scrivono i file\nconst fileName = `mitre_attack_${today}.json`;\n\nreturn [{\n  json: {\n    source: 'MITRE ATT&CK',\n    url: 'https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json',\n    fetchedAt: $now.toISO(),\n    fileName,\n    sha256,\n    sizeBytes: Buffer.byteLength(data, 'utf8')\n  },\n  binary: {\n    data: { data: binary, mimeType: 'application/json', fileName }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3920,
+        2128
+      ],
+      "id": "48b8ee53-4c35-4b52-bf4e-f79ae139ba6c",
+      "name": "Encode MITRE to Base64"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/threatfox_{{ $now.format('yyyy-MM-dd') }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4144,
+        1408
+      ],
+      "id": "c581fae4-f084-4993-a1b8-6895c9e4411b",
+      "name": "Write ThreatFox Snapshot"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/malwarebazaar_{{ $now.format('yyyy-MM-dd') }}.zip",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        3920,
+        1568
+      ],
+      "id": "8a5da5f5-95b7-4d53-9b7f-c5cf22a6ea22",
+      "name": "Write MalwareBazaar Snapshot"
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4512,
+        1712
+      ],
+      "id": "8f3d729c-c6e3-4233-9ac8-106d5bd01759",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/manifest_{{ $now.format('yyyy-MM-dd') }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4976,
+        1760
+      ],
+      "id": "5187ce1a-bf74-4fda-a83b-b02a3be4b4c0",
+      "name": "Write Manifest"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst fs = require('fs');\n\n// Il manifest descrive i file davvero presenti nella cartella delle acquisizioni,\n// non quelli annunciati dai rami del flusso. Cosi non dipende dall'ordine in cui\n// i rami terminano, e soprattutto l'impronta certifica il contenuto scritto su\n// disco, che e esattamente quello che la normalizzazione poi rilegge.\nconst CARTELLA = '/data/raw';\n\n// Il prefisso del nome file dice da quale fonte proviene. Sono ordinati dal piu\n// lungo al piu corto, altrimenti otx_subscribed verrebbe riconosciuto come otx.\nconst FONTI = {\n  otx_subscribed: {\n    source: 'AlienVault OTX (subscribed)',\n    url: 'https://otx.alienvault.com/api/v1/pulses/subscribed?limit=50',\n  },\n  malwarebazaar: {\n    source: 'MalwareBazaar',\n    url: 'https://bazaar.abuse.ch/export/csv/full/',\n  },\n  mitre_attack: {\n    source: 'MITRE ATT&CK',\n    url: 'https://raw.githubusercontent.com/mitre-attack/attack-stix-data/v19.2/enterprise-attack/enterprise-attack.json',\n  },\n  threatfox: {\n    source: 'ThreatFox',\n    url: 'https://threatfox.abuse.ch/export/json/full/',\n  },\n  malpedia: {\n    source: 'Malpedia',\n    url: 'https://malpedia.caad.fkie.fraunhofer.de/api/get/families',\n  },\n  urlhaus: {\n    source: 'URLhaus',\n    url: 'https://urlhaus.abuse.ch/downloads/json/',\n  },\n};\n\nconst oggi = $now.toFormat('yyyy-MM-dd');\nconst prefissi = Object.keys(FONTI).sort((a, b) => b.length - a.length);\nconst sources = [];\n\nfor (const nome of fs.readdirSync(CARTELLA).sort()) {\n  if (nome.startsWith('manifest_') || !nome.includes(oggi)) continue;\n\n  const prefisso = prefissi.find((chiave) => nome.startsWith(chiave));\n  if (!prefisso) continue;\n\n  const percorso = `${CARTELLA}/${nome}`;\n  const impronta = crypto.createHash('sha256');\n  const flusso = fs.createReadStream(percorso, { highWaterMark: 4 * 1024 * 1024 });\n  await new Promise((completa, fallisci) => {\n    flusso.on('data', (blocco) => impronta.update(blocco));\n    flusso.on('end', completa);\n    flusso.on('error', fallisci);\n  });\n\n  const informazioni = fs.statSync(percorso);\n  sources.push({\n    source: FONTI[prefisso].source,\n    url: FONTI[prefisso].url,\n    fetchedAt: informazioni.mtime.toISOString(),\n    fileName: nome,\n    sha256: impronta.digest('hex'),\n    sizeBytes: informazioni.size,\n  });\n}\n\nif (sources.length === 0) {\n  throw new Error(`Nessuna acquisizione datata ${oggi} in ${CARTELLA}.`);\n}\n\nconst testo = JSON.stringify({ generatedAt: $now.toISO(), sources }, null, 2);\n\nreturn [{\n  json: { fonti: sources.length },\n  binary: {\n    data: {\n      data: Buffer.from(testo, 'utf8').toString('base64'),\n      mimeType: 'application/json',\n      fileName: 'manifest.json',\n    },\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4752,
+        1760
+      ],
+      "id": "6cd1dcb8-a23e-41be-8e6c-3c9e1fa8a62d",
+      "name": "Build Manifest"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/mitre_attack_{{ $now.format('yyyy-MM-dd') }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4144,
+        2128
+      ],
+      "id": "84aedf64-56a2-4126-af1b-938896eec0de",
+      "name": "Write MITRE Snapshot"
+    },
+    {
+      "parameters": {
+        "url": "https://otx.alienvault.com/api/v1/pulses/subscribed?limit=50",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "alienVaultApi",
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.next === null }}",
+              "limitPagesFetched": true,
+              "maxRequests": 5
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3696,
+        1936
+      ],
+      "id": "0ee4c32c-b6f4-4f52-97b7-ea66f8ed06ba",
+      "name": "OTX - Get Subscribed Pulses",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "alienVaultApi": {
+          "id": "WdtvP8rcmvJaICUt",
+          "name": "AlienVault account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\n// Con la paginazione n8n restituisce un elemento per pagina: i risultati vanno\n// riuniti in un unico oggetto, nella stessa forma in cui l'API li restituirebbe\n// se stessero in una pagina sola, perche e quella che la normalizzazione legge.\nconst pagine = $input.all().map(elemento => elemento.json);\nconst risultati = pagine.flatMap(pagina => pagina.results || []);\nconst unito = { count: risultati.length, results: risultati };\n\nconst data = JSON.stringify(unito, null, 2);\nconst sha256 = crypto.createHash('sha256').update(data, 'utf8').digest('hex');\nconst binary = Buffer.from(data, 'utf8').toString('base64');\nconst today = $now.toFormat('yyyy-MM-dd');  // stesso fuso dei nodi che scrivono i file\nconst fileName = `otx_subscribed_${today}.json`;\n\nreturn [{\n  json: {\nsource: 'AlienVault OTX (subscribed)',\n    url: 'https://otx.alienvault.com/api/v1/pulses/subscribed?limit=50',\n    fetchedAt: $now.toISO(),\n    fileName,\n    sha256,\n    sizeBytes: Buffer.byteLength(data, 'utf8')\n  },\n  binary: {\n    data: { data: binary, mimeType: 'application/json', fileName }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3920,
+        1936
+      ],
+      "id": "d5ffa50b-d124-4349-a646-cafc433c2e38",
+      "name": "Encode OTX Subscribed to Base64"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/raw/otx_subscribed_{{ $now.format('yyyy-MM-dd') }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4144,
+        1936
+      ],
+      "id": "1bdf9b5b-12c1-492b-a2c4-3931cbb898f4",
+      "name": "Write OTX Subscribed Snapshot"
+    },
+    {
+      "parameters": {
+        "url": "https://threatfox.abuse.ch/export/json/full/",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3712,
+        1408
+      ],
+      "id": "5eeea06f-2ca1-4c71-a23c-6db6fec42fbf",
+      "name": "ThreatFox - Archivio completo"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        3856,
+        1408
+      ],
+      "id": "7039480a-4c51-4555-bc6e-4f12bb6bfba7",
+      "name": "estrarre lo ZIP"
+    },
+    {
+      "parameters": {
+        "url": "https://bazaar.abuse.ch/export/csv/full/",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3696,
+        1568
+      ],
+      "id": "daa09752-6fef-4075-9aff-64ce1cc891b4",
+      "name": "MalwareBazaar - Archivio completo"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule - Daily IOC Fetch": {
+      "main": [
+        [
+          {
+            "node": "ThreatFox - Archivio completo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MalwareBazaar - Archivio completo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "URLhaus - Archivio completo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MITRE ATTACK",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OTX - Get Subscribed Pulses",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Malpedia - Famiglie",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MITRE ATTACK": {
+      "main": [
+        [
+          {
+            "node": "Encode MITRE to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode ThreatFox to Base64": {
+      "main": [
+        [
+          {
+            "node": "Write ThreatFox Snapshot",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URLhaus - Archivio completo": {
+      "main": [
+        [
+          {
+            "node": "estrarre lo ZIP URLhaus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "estrarre lo ZIP URLhaus": {
+      "main": [
+        [
+          {
+            "node": "Encode URLhaus to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode URLhaus to Base64": {
+      "main": [
+        [
+          {
+            "node": "Write URLhaus Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write URLhaus Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Malpedia - Famiglie": {
+      "main": [
+        [
+          {
+            "node": "Encode Malpedia to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode Malpedia to Base64": {
+      "main": [
+        [
+          {
+            "node": "Write Malpedia Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Malpedia Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Encode MITRE to Base64": {
+      "main": [
+        [
+          {
+            "node": "Write MITRE Snapshot",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Build Manifest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Manifest": {
+      "main": [
+        [
+          {
+            "node": "Write Manifest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OTX - Get Subscribed Pulses": {
+      "main": [
+        [
+          {
+            "node": "Encode OTX Subscribed to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode OTX Subscribed to Base64": {
+      "main": [
+        [
+          {
+            "node": "Write OTX Subscribed Snapshot",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "ThreatFox - Archivio completo": {
+      "main": [
+        [
+          {
+            "node": "estrarre lo ZIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "estrarre lo ZIP": {
+      "main": [
+        [
+          {
+            "node": "Encode ThreatFox to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MalwareBazaar - Archivio completo": {
+      "main": [
+        [
+          {
+            "node": "Write MalwareBazaar Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write MalwareBazaar Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Impronta MalwareBazaar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Impronta MalwareBazaar": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9362513c-752f-41b4-916e-60bfc6dc9114",
+  "meta": {
+    "instanceId": "5712022727f8232e226748b51b0a335527c417a2df516531db7a8fbc94c7b55a"
+  },
+  "nodeGroups": [],
+  "id": "jrhu1em7QQI0pWeq",
+  "tags": []
+}

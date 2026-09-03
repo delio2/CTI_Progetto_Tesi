@@ -1,0 +1,62 @@
+{
+  "3908273": [
+    {
+      "dateadded": "2026-08-26 08:20:20 UTC",
+      "url": "https://impectorinternational.com/harder/binikuku.dat",
+      "url_status": "online",
+      "last_online": "2026-08-26 08:20:20 UTC",
+      "threat": "malware_download",
+      "tags": [
+        "Formbook"
+      ],
+      "urlhaus_link": "https://urlhaus.abuse.ch/url/3908273/",
+      "reporter": "abuse_ch"
+    }
+  ],
+  "3908468": [
+    {
+      "dateadded": "2026-08-26 10:11:21 UTC",
+      "url": "http://115.55.193.196:43955/i",
+      "url_status": "online",
+      "last_online": "2026-08-26 10:11:21 UTC",
+      "threat": "malware_download",
+      "tags": [
+        "32-bit",
+        "elf",
+        "mips",
+        "Mozi"
+      ],
+      "urlhaus_link": "https://urlhaus.abuse.ch/url/3908468/",
+      "reporter": "geenensp"
+    }
+  ],
+  "3908467": [
+    {
+      "dateadded": "2026-08-26 10:02:02 UTC",
+      "url": "http://42.177.20.8:51965/i",
+      "url_status": "offline",
+      "last_online": null,
+      "threat": "malware_download",
+      "tags": null,
+      "urlhaus_link": "https://urlhaus.abuse.ch/url/3908467/",
+      "reporter": "cesnet_certs"
+    }
+  ],
+  "9999001": [
+    {
+      "dateadded": "2026-08-26 10:11:21 UTC",
+      "url": "http://tec-way.ch:43955/i",
+      "url_status": "online",
+      "last_online": "2026-08-26 10:11:21 UTC",
+      "threat": "malware_download",
+      "tags": [
+        "32-bit",
+        "elf",
+        "mips",
+        "Mozi"
+      ],
+      "urlhaus_link": "https://urlhaus.abuse.ch/url/3908468/",
+      "reporter": "geenensp"
+    }
+  ]
+}
